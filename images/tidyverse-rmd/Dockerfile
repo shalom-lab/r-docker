@@ -6,6 +6,7 @@ LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://github.com/shalom-lab/r-docker" \
       maintainer="slren"
 
+# Install fonts and other dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ghostscript \
@@ -29,9 +30,23 @@ RUN apt-get update && \
         latex-cjk-chinese \
         latex-cjk-chinese-arphic-bkai00mp \
         latex-cjk-chinese-arphic-gbsn00lp \
-        latex-cjk-chinese-arphic-gkai00mp && \
+        latex-cjk-chinese-arphic-gkai00mp \
+        wget \
+        unzip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Install Source Han fonts
+RUN mkdir -p /usr/share/fonts/opentype/source-han && \
+    cd /usr/share/fonts/opentype/source-han && \
+    wget https://github.com/adobe-fonts/source-han-serif/releases/download/2.002R/SourceHanSerifSC.zip && \
+    wget https://github.com/adobe-fonts/source-han-sans/releases/download/2.004R/SourceHanSansSC.zip && \
+    unzip SourceHanSerifSC.zip && \
+    unzip SourceHanSansSC.zip && \
+    rm *.zip
+
+# Update font cache
+RUN fc-cache -fv
 
 # Install additional R packages
 RUN R -e 'install.packages(c("formatr", "runit", "testthat", "binb", "linl", "pinp", "tint", "flexdashboard"), repos="https://cloud.r-project.org/", dependencies=TRUE)'
@@ -44,8 +59,33 @@ RUN echo "options(device = function(file, width = 7, height = 7, ...) { \
 
 # Create default R Markdown template with Chinese support
 RUN mkdir -p /usr/local/lib/R/site-library/rmarkdown/rmd/latex && \
-    printf '\\documentclass{article}\n\\usepackage{xeCJK}\n\\setCJKmainfont{Noto Serif CJK SC}\n\\setCJKsansfont{Noto Sans CJK SC}\n\\setCJKmonofont{Noto Sans Mono CJK SC}\n\\XeTeXlinebreaklocale "zh"\n\\XeTeXlinebreakskip = 0pt plus 1pt\n\\begin{document}\n\\end{document}' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
-    printf '---\ntitle: "Untitled"\nauthor: "Your Name"\ndate: "`r format(Sys.time(), \"%%Y-%%m-%%d\")`"\noutput:\n  pdf_document:\n    latex_engine: xelatex\n    template: default.tex\n---' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex
+    cat > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex << 'EOL'
+\documentclass{article}
+\usepackage{xeCJK}
+\usepackage{fontspec}
+\setmainfont{Source Han Serif SC}
+\setsansfont{Source Han Sans SC}
+\setmonofont{Source Han Sans SC}
+\setCJKmainfont[BoldFont=Source Han Serif SC Bold]{Source Han Serif SC}
+\setCJKsansfont[BoldFont=Source Han Sans SC Bold]{Source Han Sans SC}
+\setCJKmonofont{Source Han Sans SC}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt
+\begin{document}
+\end{document}
+EOL
+
+RUN cat > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex << 'EOL'
+---
+title: "Untitled"
+author: "Your Name"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    template: default.tex
+---
+EOL
 
 RUN mkdir -p ~/.R && \
     echo "_R_CHECK_FORCE_SUGGESTS_=FALSE" > ~/.R/check.Renviron && \
