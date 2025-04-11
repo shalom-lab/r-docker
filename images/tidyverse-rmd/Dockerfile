@@ -44,26 +44,8 @@ RUN echo "options(device = function(file, width = 7, height = 7, ...) { \
 
 # Create default R Markdown template with Chinese support
 RUN mkdir -p /usr/local/lib/R/site-library/rmarkdown/rmd/latex && \
-    echo '---
-title: "Untitled"
-author: "Your Name"
-date: "`r format(Sys.time(), \"%Y-%m-%d\")`"
-output: 
-  pdf_document:
-    latex_engine: xelatex
-    template: default.tex
----' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex
-
-# Create default.tex with Chinese support
-RUN echo '\\documentclass{article}
-\\usepackage{xeCJK}
-\\setCJKmainfont{Noto Serif CJK SC}
-\\setCJKsansfont{Noto Sans CJK SC}
-\\setCJKmonofont{Noto Sans Mono CJK SC}
-\\XeTeXlinebreaklocale "zh"
-\\XeTeXlinebreakskip = 0pt plus 1pt
-\\begin{document}
-\\end{document}' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex
+    printf '\\documentclass{article}\n\\usepackage{xeCJK}\n\\setCJKmainfont{Noto Serif CJK SC}\n\\setCJKsansfont{Noto Sans CJK SC}\n\\setCJKmonofont{Noto Sans Mono CJK SC}\n\\XeTeXlinebreaklocale "zh"\n\\XeTeXlinebreakskip = 0pt plus 1pt\n\\begin{document}\n\\end{document}' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    printf '---\ntitle: "Untitled"\nauthor: "Your Name"\ndate: "`r format(Sys.time(), \"%%Y-%%m-%%d\")`"\noutput:\n  pdf_document:\n    latex_engine: xelatex\n    template: default.tex\n---' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex
 
 RUN mkdir -p ~/.R && \
     echo "_R_CHECK_FORCE_SUGGESTS_=FALSE" > ~/.R/check.Renviron && \
