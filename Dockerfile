@@ -24,16 +24,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install additional R packages
-RUN install2.r --error --skipinstalled \
-    formatr \
-    runit \
-    testthat \
-    binb \
-    linl \
-    pinp \
-    tint \
-    flexdashboard && \
-    rm -rf /tmp/downloaded_packages
+RUN R -e 'install.packages(c("formatr", "runit", "testthat", "binb", "linl", "pinp", "tint", "flexdashboard"), repos="https://cloud.r-project.org/", dependencies=TRUE)'
 
 RUN mkdir -p ~/.R && \
     echo "_R_CHECK_FORCE_SUGGESTS_=FALSE" > ~/.R/check.Renviron && \
