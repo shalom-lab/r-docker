@@ -59,64 +59,29 @@ RUN echo "options(device = function(file, width = 7, height = 7, ...) { \
 
 # Create default R Markdown template with Chinese support
 RUN mkdir -p /usr/local/lib/R/site-library/rmarkdown/rmd/latex && \
-    cat << 'EOL' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex
-        \documentclass{article}
-        \usepackage{xeCJK}
-        \usepackage{fontspec}
-        \setmainfont{Source Han Serif SC}
-        \setsansfont{Source Han Sans SC}
-        \setmonofont{Source Han Sans SC}
-        \setCJKmainfont[BoldFont=Source Han Serif SC Bold]{Source Han Serif SC}
-        \setCJKsansfont[BoldFont=Source Han Sans SC Bold]{Source Han Sans SC}
-        \setCJKmonofont{Source Han Sans SC}
-        \XeTeXlinebreaklocale "zh"
-        \XeTeXlinebreakskip = 0pt plus 1pt
-        \begin{document}
-        \end{document}
-EOL
+    echo '\documentclass{article}' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\usepackage{xeCJK}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\usepackage{fontspec}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setmainfont{Source Han Serif SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setsansfont{Source Han Sans SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setmonofont{Source Han Sans SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setCJKmainfont[BoldFont=Source Han Serif SC Bold]{Source Han Serif SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setCJKsansfont[BoldFont=Source Han Sans SC Bold]{Source Han Sans SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setCJKmonofont{Source Han Sans SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\XeTeXlinebreaklocale "zh"' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\XeTeXlinebreakskip = 0pt plus 1pt' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\begin{document}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\end{document}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex
 
-RUN cat << 'EOL' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex
-        ---
-        title: "Untitled"
-        author: "Your Name"
-        date: "`r format(Sys.time(), '%Y-%m-%d')`"
-        output:
-          pdf_document:
-            latex_engine: xelatex
-            template: default.tex
-        ---
-EOL
-
-RUN mkdir -p ~/.R && \
-    echo "_R_CHECK_FORCE_SUGGESTS_=FALSE" > ~/.R/check.Renviron && \
-    cd /usr/local/bin && \
-    cat > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex << 'EOL'
-\documentclass{article}
-\usepackage{xeCJK}
-\usepackage{fontspec}
-\setmainfont{Source Han Serif SC}
-\setsansfont{Source Han Sans SC}
-\setmonofont{Source Han Sans SC}
-\setCJKmainfont[BoldFont=Source Han Serif SC Bold]{Source Han Serif SC}
-\setCJKsansfont[BoldFont=Source Han Sans SC Bold]{Source Han Sans SC}
-\setCJKmonofont{Source Han Sans SC}
-\XeTeXlinebreaklocale "zh"
-\XeTeXlinebreakskip = 0pt plus 1pt
-\begin{document}
-\end{document}
-EOL
-
-RUN cat > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex << 'EOL'
----
-title: "Untitled"
-author: "Your Name"
-date: "`r format(Sys.time(), '%Y-%m-%d')`"
-output:
-  pdf_document:
-    latex_engine: xelatex
-    template: default.tex
----
-EOL
+RUN echo '---' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex && \
+    echo 'title: "Untitled"' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex && \
+    echo 'author: "Your Name"' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex && \
+    echo 'date: "`r format(Sys.time(), '"'"'%Y-%m-%d'"'"')`"' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex && \
+    echo 'output:' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex && \
+    echo '  pdf_document:' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex && \
+    echo '    latex_engine: xelatex' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex && \
+    echo '    template: default.tex' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex && \
+    echo '---' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex
 
 RUN mkdir -p ~/.R && \
     echo "_R_CHECK_FORCE_SUGGESTS_=FALSE" > ~/.R/check.Renviron && \
