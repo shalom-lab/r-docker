@@ -59,6 +59,37 @@ RUN echo "options(device = function(file, width = 7, height = 7, ...) { \
 
 # Create default R Markdown template with Chinese support
 RUN mkdir -p /usr/local/lib/R/site-library/rmarkdown/rmd/latex && \
+    cat << 'EOL' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex
+        \documentclass{article}
+        \usepackage{xeCJK}
+        \usepackage{fontspec}
+        \setmainfont{Source Han Serif SC}
+        \setsansfont{Source Han Sans SC}
+        \setmonofont{Source Han Sans SC}
+        \setCJKmainfont[BoldFont=Source Han Serif SC Bold]{Source Han Serif SC}
+        \setCJKsansfont[BoldFont=Source Han Sans SC Bold]{Source Han Sans SC}
+        \setCJKmonofont{Source Han Sans SC}
+        \XeTeXlinebreaklocale "zh"
+        \XeTeXlinebreakskip = 0pt plus 1pt
+        \begin{document}
+        \end{document}
+EOL
+
+RUN cat << 'EOL' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex
+        ---
+        title: "Untitled"
+        author: "Your Name"
+        date: "`r format(Sys.time(), '%Y-%m-%d')`"
+        output:
+          pdf_document:
+            latex_engine: xelatex
+            template: default.tex
+        ---
+EOL
+
+RUN mkdir -p ~/.R && \
+    echo "_R_CHECK_FORCE_SUGGESTS_=FALSE" > ~/.R/check.Renviron && \
+    cd /usr/local/bin && \
     cat > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex << 'EOL'
 \documentclass{article}
 \usepackage{xeCJK}
