@@ -24,6 +24,6 @@ Images are automatically built and published to Docker Hub via GitHub Actions. T
    - `DOCKERHUB_USERNAME`: Your Docker Hub username
    - `DOCKERHUB_TOKEN`: Your Docker Hub access token
 
-## �� License
+## ⚖️ License
 
-GPL-2.0 
+MIT 
