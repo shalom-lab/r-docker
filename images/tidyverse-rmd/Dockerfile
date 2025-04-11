@@ -39,11 +39,10 @@ RUN apt-get update && \
 # Install Source Han fonts
 RUN mkdir -p /usr/share/fonts/opentype/source-han && \
     cd /usr/share/fonts/opentype/source-han && \
-    wget https://github.com/adobe-fonts/source-han-sans/releases/download/2.004R/SourceHanSansCN.zip && \
-    wget https://github.com/adobe-fonts/source-han-serif/releases/download/2.002R/SourceHanSerifCN.zip && \
-    unzip SourceHanSansCN.zip && \
-    unzip SourceHanSerifCN.zip && \
-    rm *.zip
+    wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SimplifiedChinese/SourceHanSansSC-Regular.otf && \
+    wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SimplifiedChinese/SourceHanSansSC-Bold.otf && \
+    wget https://raw.githubusercontent.com/adobe-fonts/source-han-serif/release/OTF/SimplifiedChinese/SourceHanSerifSC-Regular.otf && \
+    wget https://raw.githubusercontent.com/adobe-fonts/source-han-serif/release/OTF/SimplifiedChinese/SourceHanSerifSC-Bold.otf
 
 # Update font cache
 RUN fc-cache -fv
@@ -62,12 +61,12 @@ RUN mkdir -p /usr/local/lib/R/site-library/rmarkdown/rmd/latex && \
     echo '\documentclass{article}' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
     echo '\usepackage{xeCJK}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
     echo '\usepackage{fontspec}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
-    echo '\setmainfont{Source Han Serif CN}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
-    echo '\setsansfont{Source Han Sans CN}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
-    echo '\setmonofont{Source Han Sans CN}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
-    echo '\setCJKmainfont[BoldFont=Source Han Serif CN]{Source Han Serif CN}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
-    echo '\setCJKsansfont[BoldFont=Source Han Sans CN]{Source Han Sans CN}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
-    echo '\setCJKmonofont{Source Han Sans CN}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setmainfont{Source Han Serif SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setsansfont{Source Han Sans SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setmonofont{Source Han Sans SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setCJKmainfont[BoldFont=Source Han Serif SC Bold]{Source Han Serif SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setCJKsansfont[BoldFont=Source Han Sans SC Bold]{Source Han Sans SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
+    echo '\setCJKmonofont{Source Han Sans SC}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
     echo '\XeTeXlinebreaklocale "zh"' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
     echo '\XeTeXlinebreakskip = 0pt plus 1pt' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
     echo '\begin{document}' >> /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex && \
