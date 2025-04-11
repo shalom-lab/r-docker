@@ -5,10 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - 'images/tidyverse-rmd/**'
-  pull_request:
-    branches: [ "main" ]
-    paths:
-      - 'images/tidyverse-rmd/**'
+      - '.github/workflows/tidyverse-rmd.yml'
 
 env:
   IMAGE_NAME: slren/tidyverse-rmd
