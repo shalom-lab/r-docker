@@ -1,14 +1,17 @@
-name: Docker Build and Publish
+name: Build and Publish tidyverse-rmd
 
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'images/tidyverse-rmd/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'images/tidyverse-rmd/**'
 
 env:
-  REGISTRY: docker.io
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/tidyverse-rmd
+  IMAGE_NAME: slren/tidyverse-rmd
 
 jobs:
   build:
@@ -31,7 +34,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=latest
             type=sha,format=short
@@ -39,7 +42,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ./images/tidyverse-rmd
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }} 
