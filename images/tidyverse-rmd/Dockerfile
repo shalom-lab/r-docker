@@ -24,7 +24,12 @@ RUN apt-get update && \
         fonts-noto-cjk-extra \
         fonts-wqy-microhei \
         fonts-wqy-zenhei \
-        ttf-mscorefonts-installer && \
+        ttf-mscorefonts-installer \
+        latex-cjk-all \
+        latex-cjk-chinese \
+        latex-cjk-chinese-arphic-bkai00mp \
+        latex-cjk-chinese-arphic-gbsn00lp \
+        latex-cjk-chinese-arphic-gkai00mp && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -36,6 +41,29 @@ RUN echo "options(device = function(file, width = 7, height = 7, ...) { \
     grDevices::cairo_pdf(file, width = width, height = height, ...) \
 })" >> /usr/local/lib/R/etc/Rprofile.site && \
     echo "options(bitmapType='cairo')" >> /usr/local/lib/R/etc/Rprofile.site
+
+# Create default R Markdown template with Chinese support
+RUN mkdir -p /usr/local/lib/R/site-library/rmarkdown/rmd/latex && \
+    echo '---
+title: "Untitled"
+author: "Your Name"
+date: "`r format(Sys.time(), \"%Y-%m-%d\")`"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+    template: default.tex
+---' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default-1.17.0.2.tex
+
+# Create default.tex with Chinese support
+RUN echo '\\documentclass{article}
+\\usepackage{xeCJK}
+\\setCJKmainfont{Noto Serif CJK SC}
+\\setCJKsansfont{Noto Sans CJK SC}
+\\setCJKmonofont{Noto Sans Mono CJK SC}
+\\XeTeXlinebreaklocale "zh"
+\\XeTeXlinebreakskip = 0pt plus 1pt
+\\begin{document}
+\\end{document}' > /usr/local/lib/R/site-library/rmarkdown/rmd/latex/default.tex
 
 RUN mkdir -p ~/.R && \
     echo "_R_CHECK_FORCE_SUGGESTS_=FALSE" > ~/.R/check.Renviron && \
