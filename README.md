@@ -1,14 +1,14 @@
-# R Docker Images Collection
+# 🐳 R Docker Images Collection
 
-A collection of R-based Docker images for data science and document processing.
+A curated collection of R-based Docker images for data science and document processing.
 
-## Available Images
+## 📦 Available Images
 
 | Image | Description | Status |
 |-------|-------------|--------|
-| [slren/tidyverse-rmd](images/tidyverse-rmd) | R Markdown and LaTeX environment based on rocker/tidyverse | ![Build Status](https://github.com/slren/r-docker/actions/workflows/tidyverse-rmd.yml/badge.svg) |
+| [slren/tidyverse-rmd](images/tidyverse-rmd) | R Markdown and LaTeX environment based on rocker/tidyverse | [![Docker Hub](https://img.shields.io/docker/pulls/slren/tidyverse-rmd.svg)](https://hub.docker.com/r/slren/tidyverse-rmd) |
 
-## Building Images
+## 🔨 Building Images
 
 ```bash
 # For tidyverse-rmd
@@ -16,7 +16,7 @@ cd images/tidyverse-rmd
 docker build -t slren/tidyverse-rmd .
 ```
 
-## GitHub Actions
+## ⚡ GitHub Actions
 
 Images are automatically built and published to Docker Hub via GitHub Actions. To set up:
 
@@ -24,6 +24,6 @@ Images are automatically built and published to Docker Hub via GitHub Actions. T
    - `DOCKERHUB_USERNAME`: Your Docker Hub username
    - `DOCKERHUB_TOKEN`: Your Docker Hub access token
 
-## License
+## �� License
 
 GPL-2.0 
